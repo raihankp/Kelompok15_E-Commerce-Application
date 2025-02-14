@@ -33,7 +33,11 @@ public class Product {
 	@NotBlank
 	@Size(min = 3, message = "Product name must contain atleast 3 characters")
 	private String productName;
-	
+
+	@ManyToOne
+	@JoinColumn(name = "brand_id")
+	private Brand brand;
+
 	private String image;
 	
 	@NotBlank
