@@ -36,6 +36,7 @@ import jakarta.transaction.Transactional;
 @Transactional
 @Service
 public class OrderServiceImpl implements OrderService {
+	//TODO: kalo ada diskon pake special price
 
 	@Autowired
 	public UserRepo userRepo;
