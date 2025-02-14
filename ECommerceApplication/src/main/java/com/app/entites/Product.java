@@ -38,6 +38,10 @@ public class Product {
 	@JoinColumn(name = "brand_id")
 	private Brand brand;
 
+	@ManyToOne
+	@JoinColumn(name = "coupon_id")
+	private Coupon coupon;
+
 	private String image;
 	
 	@NotBlank
