@@ -10,7 +10,7 @@ import com.app.payloads.ProductResponse;
 
 public interface ProductService {
 
-	ProductDTO addProduct(Long categoryId, Product product);
+	ProductDTO addProduct(Long categoryId, Long brandId, Product product);
 
 	ProductResponse getAllProducts(Integer pageNumber, Integer pageSize, String sortBy, String sortOrder);
 
@@ -24,6 +24,8 @@ public interface ProductService {
 	ProductResponse searchProductByKeyword(String keyword, Integer pageNumber, Integer pageSize, String sortBy,
 			String sortOrder);
 
-	String deleteProduct(Long productId);
+	ProductResponse searchProductByBrand(Long brandId, Integer pageNumber, Integer pageSize, String sortBy,
+										 String sortOrder);
 
+	String deleteProduct(Long productId);
 }
