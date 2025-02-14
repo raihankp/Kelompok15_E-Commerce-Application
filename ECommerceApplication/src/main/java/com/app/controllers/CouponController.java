@@ -33,7 +33,7 @@ public class CouponController {
     public ResponseEntity<CouponResponse> getCoupons(
             @RequestParam(name = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
             @RequestParam(name = "pageSize", defaultValue = AppConstants.PAGE_SIZE, required = false) Integer pageSize,
-            @RequestParam(name = "sortBy", defaultValue = "id", required = false) String sortBy,
+            @RequestParam(name = "sortBy", defaultValue = "couponId", required = false) String sortBy,
             @RequestParam(name = "sortOrder", defaultValue = "asc", required = false) String sortOrder) {
 
         CouponResponse couponResponse = couponService.getCoupons(pageNumber, pageSize, sortBy, sortOrder);

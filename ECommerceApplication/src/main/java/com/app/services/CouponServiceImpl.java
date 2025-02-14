@@ -18,6 +18,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -93,16 +94,22 @@ public class CouponServiceImpl implements CouponService{
         return modelMapper.map(savedCoupon, CouponDTO.class);
     }
 
+    @Transactional
     @Override
     public String deleteCoupon(Long couponId) {
         Coupon coupon = couponRepo.findById(couponId)
                 .orElseThrow(() -> new ResourceNotFoundException("Coupon", "couponId", couponId));
 
         List<Product> products = coupon.getProducts();
-
+        // Remove coupon from associated products
         products.forEach(product -> {
-            productService.deleteProduct(product.getProductId());
+            product.setCoupon(null);
+            product.setDiscount(0);
+            product.setSpecialPrice(product.getPrice()); // Restore original price
+            productRepo.save(product);
         });
+
+        productRepo.saveAll(products);
 
         couponRepo.delete(coupon);
 
@@ -123,7 +130,7 @@ public class CouponServiceImpl implements CouponService{
 
         savedProduct.setCoupon(savedCoupon);
         savedProduct.setDiscount(savedCoupon.getDiscountPercentage());
-        savedProduct.setSpecialPrice(savedProduct.getPrice() - (savedProduct.getPrice() * savedCoupon.getDiscountPercentage()));
+        savedProduct.setSpecialPrice(savedProduct.getPrice() - (savedProduct.getPrice() * savedCoupon.getDiscountPercentage()/100));
         productRepo.save(savedProduct);
 
         return "Coupon successfully applied";
