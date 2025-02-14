@@ -25,7 +25,6 @@ public class Coupon {
     @Size(min = 2, message = "coupon name must contain at least 2 characters")
     private String couponName;
 
-    @NotBlank
     @Min(1)
     @Max(99)
     private Long discountPercentage;

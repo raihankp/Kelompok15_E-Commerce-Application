@@ -122,8 +122,8 @@ public class CouponServiceImpl implements CouponService{
         }
 
         savedProduct.setCoupon(savedCoupon);
-        savedProduct.setDiscount(savedProduct.getDiscount());
-        savedProduct.setSpecialPrice(savedProduct.getPrice() - (savedProduct.getPrice() * savedProduct.getDiscount()));
+        savedProduct.setDiscount(savedCoupon.getDiscountPercentage());
+        savedProduct.setSpecialPrice(savedProduct.getPrice() - (savedProduct.getPrice() * savedCoupon.getDiscountPercentage()));
         productRepo.save(savedProduct);
 
         return "Coupon successfully applied";
