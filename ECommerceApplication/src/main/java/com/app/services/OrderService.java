@@ -9,6 +9,7 @@ import com.app.payloads.OrderResponse;
 public interface OrderService {
 	
 	OrderDTO placeOrder(String email, Long cartId, String paymentMethod, OrderNotesDTO orderNotes);
+	OrderDTO placeOrderGoPay(String email, Long cartId, String noTelp, OrderNotesDTO orderNotes);
 	
 	OrderDTO getOrder(String email, Long orderId);
 	

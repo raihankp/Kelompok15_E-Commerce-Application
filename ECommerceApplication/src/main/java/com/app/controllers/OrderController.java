@@ -30,6 +30,13 @@ public class OrderController {
 		return new ResponseEntity<OrderDTO>(order, HttpStatus.CREATED);
 	}
 
+	@PostMapping("/public/users/{email}/carts/{cartId}/payments/gopay/{noTelp}/order")
+	public ResponseEntity<OrderDTO> orderProductsGoPay(@PathVariable String email, @PathVariable Long cartId, @PathVariable String noTelp, @RequestBody(required = false) OrderNotesDTO orderNotes) {
+		OrderDTO order = orderService.placeOrderGoPay(email, cartId, noTelp, orderNotes);
+
+		return new ResponseEntity<OrderDTO>(order, HttpStatus.CREATED);
+	}
+
 	@GetMapping("/admin/orders")
 	public ResponseEntity<OrderResponse> getAllOrders(
 			@RequestParam(name = "pageNumber", defaultValue = AppConstants.PAGE_NUMBER, required = false) Integer pageNumber,
