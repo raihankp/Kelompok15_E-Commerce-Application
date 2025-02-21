@@ -42,7 +42,8 @@ public class Order {
 	@OneToOne
 	@JoinColumn(name = "payment_id")
 	private Payment payment;
-	
+
+	private String customerNotes;
 	private Double totalAmount;
 	private String orderStatus;
 }
