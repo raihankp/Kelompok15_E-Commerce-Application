@@ -1,5 +1,6 @@
 package com.app.entites;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,6 +53,7 @@ public class Product {
 	private double price;
 	private double discount;
 	private double specialPrice;
+	private LocalDateTime expiryCoupon;
 
 	@ManyToOne
 	@JoinColumn(name = "category_id")

@@ -20,6 +20,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -124,6 +125,10 @@ public class CouponServiceImpl implements CouponService{
         Product savedProduct = productRepo.findById(productId)
                 .orElseThrow(() -> new APIException("Product with the id '" + productId + "' not found !!!"));
 
+        if(!isCouponValid(savedCoupon)){
+            throw new APIException("Can't use expired coupon");
+        }
+
         if (Optional.ofNullable(savedProduct.getCoupon()).isPresent()) {
             throw new APIException("Product with the id '" + productId + "' already has a coupon applied !!!");
         }
@@ -131,6 +136,7 @@ public class CouponServiceImpl implements CouponService{
         savedProduct.setCoupon(savedCoupon);
         savedProduct.setDiscount(savedCoupon.getDiscountPercentage());
         savedProduct.setSpecialPrice(savedProduct.getPrice() - (savedProduct.getPrice() * savedCoupon.getDiscountPercentage()/100));
+        savedProduct.setExpiryCoupon(savedCoupon.getExpiryDate());
         productRepo.save(savedProduct);
 
         return "Coupon successfully applied";
@@ -151,5 +157,9 @@ public class CouponServiceImpl implements CouponService{
         productRepo.save(savedProduct);
 
         return "Coupon successfully removed";
+    }
+
+    public boolean isCouponValid(Coupon coupon) {
+        return coupon.getExpiryDate().isAfter(LocalDateTime.now());
     }
 }
