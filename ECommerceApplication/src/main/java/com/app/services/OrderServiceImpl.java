@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.app.payloads.OrderNotesDTO;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -66,7 +67,7 @@ public class OrderServiceImpl implements OrderService {
 	public ModelMapper modelMapper;
 
 	@Override
-	public OrderDTO placeOrder(String email, Long cartId, String paymentMethod) {
+	public OrderDTO placeOrder(String email, Long cartId, String paymentMethod, OrderNotesDTO orderNotes) {
 
 		Cart cart = cartRepo.findCartByEmailAndCartId(email, cartId);
 
@@ -78,6 +79,11 @@ public class OrderServiceImpl implements OrderService {
 
 		order.setEmail(email);
 		order.setOrderDate(LocalDate.now());
+		if (orderNotes != null) {
+			order.setCustomerNotes(orderNotes.getCustomerNotes());
+		} else {
+			order.setCustomerNotes("");
+		}
 
 		order.setTotalAmount(cart.getTotalPrice());
 		order.setOrderStatus("Order Accepted !");
@@ -200,6 +206,20 @@ public class OrderServiceImpl implements OrderService {
 		order.setOrderStatus(orderStatus);
 
 		return modelMapper.map(order, OrderDTO.class);
+	}
+
+	@Override
+	public List<OrderDTO> getOrdersByUserAndStatus(String email, String status) {
+		List<Order> orders = orderRepo.findAllByEmailAndOrderStatus(email, status);
+
+		List<OrderDTO> orderDTOs = orders.stream().map(order -> modelMapper.map(order, OrderDTO.class))
+				.collect(Collectors.toList());
+
+		if (orderDTOs.size() == 0) {
+			throw new APIException("No orders placed yet by the user with email: " + email + " and status: " + status);
+		}
+
+		return orderDTOs;
 	}
 
 }
