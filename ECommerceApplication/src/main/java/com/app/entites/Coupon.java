@@ -1,5 +1,6 @@
 package com.app.entites;
 
+import java.time.LocalDateTime;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
@@ -28,6 +29,8 @@ public class Coupon {
     @Min(1)
     @Max(99)
     private Long discountPercentage;
+
+    private LocalDateTime expiryDate;
 
     @OneToMany(mappedBy = "coupon", cascade = CascadeType.ALL)
     private List<Product> products;
